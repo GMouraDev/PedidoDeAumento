@@ -384,13 +384,15 @@ function moverBotao() {
     const isMobile = window.innerWidth <= 768;
     
     if (isMobile) {
+        // Mobile: movimento mais agressivo se poucas tentativas
+        const intensidade = clickAttempts < 3 ? 1.5 : 1;
+        moveX = (Math.random() * 500 - 250) * intensidade; 
+        moveY = (Math.random() * 400 - 200) * intensidade;
         
-        moveX = (Math.random() * 400 - 200); 
-        moveY = (Math.random() * 300 - 150);
-        
-        
-        moveX = Math.max(-150, Math.min(150, moveX));
-        moveY = Math.max(-100, Math.min(100, moveY));
+        // Limites maiores para mobile nas primeiras tentativas
+        const limite = clickAttempts < 2 ? 200 : 120;
+        moveX = Math.max(-limite, Math.min(limite, moveX));
+        moveY = Math.max(-limite/2, Math.min(limite/2, moveY));
     } else {
         
         moveX = (Math.random() * 1200 - 600); 
@@ -413,13 +415,33 @@ botao.addEventListener("mouseenter", moverBotao);
 botao.addEventListener("mousedown", moverBotao);
 
 
+// Detecta "segurar" o dedo no botão (mobile)
+let touchTimer;
+
 botao.addEventListener("touchstart", function(event) {
     event.preventDefault(); 
-    moverBotao();
+    
+    // Mobile: move com mais frequência nas primeiras tentativas
+    const chanceMovimento = clickAttempts < 2 ? 0.5 : 0.5; // 50% ou 50% chance
+    if (Math.random() < chanceMovimento) {
+        moverBotao();
+    }
+    
+    // Timer para detectar "segurar" muito tempo
+    touchTimer = setTimeout(() => {
+        if (!isMoving) {
+            moverBotao();
+            console.log("🏃‍♂️ Botão fugiu - segurou muito tempo!");
+        }
+    }, 200);
 });
 
 botao.addEventListener("touchmove", function(event) {
     event.preventDefault(); 
+    // Move se arrastar sobre o botão
+    if (!isMoving && Math.random() < 0.3) {
+        moverBotao();
+    }
 }); 
 
 
@@ -429,7 +451,10 @@ function processarClique(event, tipo) {
     clickAttempts++;
     console.log(`🎯 ${tipo} ${clickAttempts} detectado!`);
     
-    if (clickAttempts <= 0) {
+    const isMobile = window.innerWidth <= 768;
+    const tentativasNecessarias = isMobile ? 2 : 1; // Mobile precisa de 2, desktop só 1
+    
+    if (clickAttempts <= tentativasNecessarias) {
         event.preventDefault();
         event.stopPropagation();
         moverBotao();
@@ -439,12 +464,12 @@ function processarClique(event, tipo) {
             botao.style.transform = botao.style.transform.replace(' scale(0.8)', '');
         }, 200);
         
-        console.log(`❌ Tentativa ${clickAttempts} - Escapou!`);
+        console.log(`❌ Tentativa ${clickAttempts}/${tentativasNecessarias + 1} - Escapou! (${isMobile ? 'Mobile' : 'Desktop'})`);
         return false;
     } else {
         event.preventDefault();
         event.stopPropagation();
-        console.log(`✅ Tentativa ${clickAttempts} - ABRINDO MODAL!`);
+        console.log(`✅ Tentativa ${clickAttempts} - ABRINDO MODAL! (${isMobile ? 'Mobile' : 'Desktop'})`);
         
         const modal = document.getElementById('confirmModal');
         if (modal) {
@@ -463,6 +488,9 @@ botao.addEventListener("click", function(event) {
 
 botao.addEventListener("touchend", function(event) {
     event.preventDefault();
+    
+    // Cancela o timer de "segurar"
+    clearTimeout(touchTimer);
     
     if (navigator.vibrate) {
         navigator.vibrate(50); 
