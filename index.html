@@ -19,6 +19,25 @@
 
     <video src="./Rain-Background.mp4" autoplay loop muted playsinline></video>
 
+    <div id="confirmModal" class="modal-confirm">
+        <div class="modal-confirm-content">
+            <img src="./mendigo-pica-pau.webp" alt="Pica-pau mendigo" class="modal-img">
+            <h2>Você realmente não quer me dar um aumento, chefe?</h2>
+            <div class="modal-buttons">
+                <a href="./obrigado.html"><button class="btn-sim">SIM, DESCULPA! 😅</button></a>
+                <button class="btn-nao-final" onclick="finalNao()">NÃO 😤</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sadModal" class="modal-sad">
+        <div class="modal-sad-content">
+            <div class="emoji-chorando">😭</div>
+            <h2>Beleza, obrigado...</h2>
+            <p>Vou continuar sendo um funcionário dedicado mesmo assim 🥺</p>
+        </div>
+    </div>
+
 </body>
 </html>
 
@@ -53,7 +72,26 @@
         background: linear-gradient(145deg, rgb(13, 60, 190), rgb(22, 123, 231));
         border: none;
         box-shadow: 0 0 20px rgb(12, 76, 196);
-        transition: 0.3s;
+        transition: 0.2s ease-out;
+    }
+
+    #neg {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        cursor: pointer;
+        pointer-events: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    #neg:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+    }
+
+    #neg:active {
+        cursor: pointer;
     }
 
     #pos:hover {
@@ -77,6 +115,146 @@
         opacity: 0.4;
     }
 
+    .modal-confirm {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-confirm-content {
+        background-color: #1a1a1a;
+        margin: 8% auto;
+        padding: 30px;
+        border: 3px solid rgb(255, 190, 26);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 0 30px rgba(255, 190, 26, 0.8);
+        animation: slideDown 0.5s ease-out;
+    }
+
+    .modal-img {
+        width: 150px;
+        height: auto;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .modal-confirm-content h2 {
+        color: rgb(255, 190, 26);
+        font-size: 24px;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        margin-bottom: 25px;
+        text-shadow: 0 0 8px black;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-sim, .btn-nao-final {
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        min-width: 160px;
+    }
+
+    .btn-sim {
+        background: linear-gradient(145deg, rgb(13, 160, 13), rgb(22, 231, 22));
+        color: white;
+        box-shadow: 0 0 20px rgb(12, 196, 12);
+    }
+
+    .btn-sim:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 40px rgb(1, 255, 1);
+    }
+
+    .btn-nao-final {
+        background: linear-gradient(145deg, rgb(219, 5, 5), rgb(249, 65, 65));
+        color: white;
+        box-shadow: 0 0 20px rgb(255, 0, 0);
+    }
+
+    .btn-nao-final:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgb(255, 50, 50);
+    }
+
+    .modal-sad {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-sad-content {
+        background-color: #0f0f0f;
+        margin: 15% auto;
+        padding: 40px;
+        border: 2px solid #555;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        animation: fadeIn 1s ease-out;
+    }
+
+    .emoji-chorando {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bounce 2s infinite;
+    }
+
+    .modal-sad-content h2 {
+        color: #666;
+        font-size: 28px;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        margin-bottom: 15px;
+    }
+
+    .modal-sad-content p {
+        color: #888;
+        font-size: 16px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    @keyframes slideDown {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
 
 </style>
 
@@ -86,12 +264,116 @@ const botao = document.querySelector('#neg');
 
 let moveX = 0;
 let moveY = 0;
+let isMoving = false;
 
-botao.addEventListener("mouseover", function () {
-    moveX = (Math.random() * 801 - 400); 
-    moveY = (Math.random() * 401 - 400);
+function moverBotao() {
+    if (isMoving) return;
+    
+    isMoving = true;
+    
+                
+    moveX = (Math.random() * 1200 - 600); 
+    moveY = (Math.random() * 800 - 400);
+    
+    
+    moveX = Math.max(-300, Math.min(300, moveX));
+    moveY = Math.max(-200, Math.min(200, moveY));
 
-    botao.style.transform = `translate(${moveX}px, ${moveY}px)`; 
-})
+    botao.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    
+    
+    setTimeout(() => {
+        isMoving = false;
+    }, 100);
+}
+
+
+botao.addEventListener("mouseover", moverBotao);
+botao.addEventListener("mouseenter", moverBotao);
+botao.addEventListener("mousedown", moverBotao);
+botao.addEventListener("touchstart", moverBotao); 
+
+
+let clickAttempts = 0;
+botao.addEventListener("click", function(event) {
+    clickAttempts++;
+    
+    
+    const chanceDeEscape = clickAttempts < 5 ? 0.9 : (clickAttempts < 10 ? 0.6 : 0.3);
+    
+    if (Math.random() < chanceDeEscape) {
+       
+        event.preventDefault();
+        event.stopPropagation();
+        moverBotao();
+        
+        
+        botao.style.transform += ' scale(0.8)';
+        setTimeout(() => {
+            botao.style.transform = botao.style.transform.replace(' scale(0.8)', '');
+        }, 200);
+        
+        console.log(`Tentativa ${clickAttempts} - Escapou! (chance: ${chanceDeEscape})`);
+        return false;
+    } else {
+        event.preventDefault();
+        event.stopPropagation();
+        console.log(`Tentativa ${clickAttempts} - CONSEGUIU CLICAR!`);
+        document.getElementById('confirmModal').style.display = 'block';
+        return false;
+    }
+});
+
+
+botao.addEventListener("contextmenu", function(event) {
+    event.preventDefault();
+    moverBotao();
+    return false;
+});
+
+botao.addEventListener("focus", moverBotao);
+
+
+document.addEventListener("mousemove", function(event) {
+    const rect = botao.getBoundingClientRect();
+    const distance = Math.sqrt(
+        Math.pow(event.clientX - (rect.left + rect.width/2), 2) + 
+        Math.pow(event.clientY - (rect.top + rect.height/2), 2)
+    );
+    
+    
+    const zonaProximidade = clickAttempts < 3 ? 80 : (clickAttempts < 7 ? 40 : 20);
+    
+    if (distance < zonaProximidade && !isMoving && Math.random() < 0.3) {
+        moverBotao();
+    }
+});
+
+
+function closeModal() {
+    document.getElementById('confirmModal').style.display = 'none';
+    document.getElementById('sadModal').style.display = 'none';
+}
+
+
+function finalNao() {
+    document.getElementById('confirmModal').style.display = 'none';
+    document.getElementById('sadModal').style.display = 'block';
+    
+    
+    setTimeout(() => {
+        closeModal();
+    }, 4000);
+}
+
+
+window.onclick = function(event) {
+    const confirmModal = document.getElementById('confirmModal');
+    const sadModal = document.getElementById('sadModal');
+    
+    if (event.target === confirmModal || event.target === sadModal) {
+        closeModal();
+    }
+}
 
 </script>
