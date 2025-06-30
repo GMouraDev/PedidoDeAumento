@@ -138,6 +138,9 @@
         text-align: center;
         box-shadow: 0 0 30px rgba(255, 190, 26, 0.8);
         animation: slideDown 0.5s ease-out;
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .modal-img {
@@ -171,6 +174,10 @@
         cursor: pointer;
         transition: 0.3s;
         min-width: 160px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        text-align: center;
+        line-height: 1.2;
     }
 
     .btn-sim {
@@ -218,6 +225,9 @@
         text-align: center;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
         animation: fadeIn 1s ease-out;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
     }
 
     .emoji-chorando {
@@ -292,47 +302,63 @@
 
         
         .modal-confirm-content {
-            margin: 5% auto;
+            margin: 3% auto;
             width: 95%;
-            padding: 20px;
-            max-width: 350px;
+            padding: 25px 15px;
+            max-width: 400px;
+            border: 2px solid rgb(255, 190, 26);
         }
 
         .modal-confirm-content h2 {
-            font-size: 20px;
+            font-size: 22px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            padding: 0 10px;
         }
 
         .modal-img {
-            width: 120px;
+            width: 140px;
+            margin-bottom: 15px;
         }
 
         .modal-buttons {
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 0 10px;
         }
 
         .btn-sim, .btn-nao-final {
-            min-width: 180px;
-            height: 50px;
+            min-width: 220px;
+            height: 55px;
+            font-size: 16px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: bold;
         }
 
         .modal-sad-content {
-            margin: 10% auto;
+            margin: 8% auto;
             width: 95%;
-            padding: 30px 20px;
-            max-width: 350px;
+            padding: 35px 20px;
+            max-width: 400px;
         }
 
         .emoji-chorando {
-            font-size: 60px;
+            font-size: 70px;
+            margin-bottom: 15px;
         }
 
         .modal-sad-content h2 {
-            font-size: 24px;
+            font-size: 26px;
+            line-height: 1.2;
+            margin-bottom: 12px;
         }
 
         .modal-sad-content p {
-            font-size: 14px;
+            font-size: 16px;
+            line-height: 1.4;
+            padding: 0 10px;
         }
     }
 
@@ -355,12 +381,86 @@
             font-size: 12px;
         }
 
+        .modal-confirm-content {
+            margin: 2% auto;
+            padding: 20px 12px;
+            max-width: 340px;
+        }
+
         .modal-confirm-content h2 {
-            font-size: 18px;
+            font-size: 19px;
+            line-height: 1.3;
+            padding: 0 5px;
+        }
+
+        .modal-img {
+            width: 110px;
+        }
+
+        .modal-buttons {
+            padding: 0 5px;
+        }
+
+        .btn-sim, .btn-nao-final {
+            min-width: 200px;
+            height: 52px;
+            font-size: 15px;
+            padding: 12px 15px;
+        }
+
+        .modal-sad-content {
+            margin: 5% auto;
+            padding: 25px 15px;
+            max-width: 340px;
+        }
+
+        .emoji-chorando {
+            font-size: 65px;
+        }
+
+        .modal-sad-content h2 {
+            font-size: 23px;
+        }
+
+        .modal-sad-content p {
+            font-size: 15px;
+            padding: 0 5px;
+        }
+    }
+
+    /* Mobile landscape - orientação horizontal */
+    @media (max-width: 768px) and (orientation: landscape) {
+        .modal-confirm-content {
+            margin: 2% auto;
+            max-height: 95vh;
+        }
+
+        .modal-confirm-content h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
         }
 
         .modal-img {
             width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .modal-buttons {
+            flex-direction: row;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-sim, .btn-nao-final {
+            min-width: 140px;
+            height: 45px;
+            font-size: 14px;
+        }
+
+        .modal-sad-content {
+            margin: 5% auto;
+            max-height: 90vh;
         }
     }
 
@@ -384,22 +484,24 @@ function moverBotao() {
     const isMobile = window.innerWidth <= 768;
     
     if (isMobile) {
-        // Mobile: movimento mais agressivo se poucas tentativas
+        
         const intensidade = clickAttempts < 3 ? 1.5 : 1;
         moveX = (Math.random() * 500 - 250) * intensidade; 
         moveY = (Math.random() * 400 - 200) * intensidade;
         
-        // Limites maiores para mobile nas primeiras tentativas
-        const limite = clickAttempts < 2 ? 200 : 120;
+        
+        const limite = clickAttempts < 3 ? 200 : 120;
         moveX = Math.max(-limite, Math.min(limite, moveX));
         moveY = Math.max(-limite/2, Math.min(limite/2, moveY));
     } else {
+        // Desktop: movimento moderado
+        const intensidadeDesktop = clickAttempts < 2 ? 1.2 : 0.8;
+        moveX = (Math.random() * 800 - 400) * intensidadeDesktop; 
+        moveY = (Math.random() * 600 - 300) * intensidadeDesktop;
         
-        moveX = (Math.random() * 1200 - 600); 
-        moveY = (Math.random() * 800 - 400);
-        
-        moveX = Math.max(-300, Math.min(300, moveX));
-        moveY = Math.max(-200, Math.min(200, moveY));
+        const limiteDesktop = clickAttempts < 2 ? 250 : 150;
+        moveX = Math.max(-limiteDesktop, Math.min(limiteDesktop, moveX));
+        moveY = Math.max(-limiteDesktop/2, Math.min(limiteDesktop/2, moveY));
     }
 
     botao.style.transform = `translate(${moveX}px, ${moveY}px)`;
@@ -410,24 +512,36 @@ function moverBotao() {
 }
 
 
-botao.addEventListener("mouseover", moverBotao);
-botao.addEventListener("mouseenter", moverBotao);
-botao.addEventListener("mousedown", moverBotao);
+botao.addEventListener("mouseover", function() {
+    if (clickAttempts < 2 && Math.random() < 0.5) {
+        moverBotao();
+    }
+});
+
+botao.addEventListener("mouseenter", function() {
+    if (clickAttempts < 2 && Math.random() < 0.4) {
+        moverBotao();
+    }
+});
+
+botao.addEventListener("mousedown", function() {
+    if (clickAttempts < 3 && Math.random() < 0.6) {
+        moverBotao();
+    }
+});
 
 
-// Detecta "segurar" o dedo no botão (mobile)
+
 let touchTimer;
 
 botao.addEventListener("touchstart", function(event) {
     event.preventDefault(); 
     
-    // Mobile: move com mais frequência nas primeiras tentativas
-    const chanceMovimento = clickAttempts < 2 ? 0.5 : 0.5; // 50% ou 50% chance
+    const chanceMovimento = clickAttempts < 3 ? 0.6 : 0.3; 
     if (Math.random() < chanceMovimento) {
         moverBotao();
     }
     
-    // Timer para detectar "segurar" muito tempo
     touchTimer = setTimeout(() => {
         if (!isMoving) {
             moverBotao();
@@ -438,7 +552,6 @@ botao.addEventListener("touchstart", function(event) {
 
 botao.addEventListener("touchmove", function(event) {
     event.preventDefault(); 
-    // Move se arrastar sobre o botão
     if (!isMoving && Math.random() < 0.3) {
         moverBotao();
     }
@@ -452,7 +565,7 @@ function processarClique(event, tipo) {
     console.log(`🎯 ${tipo} ${clickAttempts} detectado!`);
     
     const isMobile = window.innerWidth <= 768;
-    const tentativasNecessarias = isMobile ? 2 : 1; // Mobile precisa de 2, desktop só 1
+    const tentativasNecessarias = isMobile ? 6 : 1; 
     
     if (clickAttempts <= tentativasNecessarias) {
         event.preventDefault();
@@ -474,9 +587,7 @@ function processarClique(event, tipo) {
         const modal = document.getElementById('confirmModal');
         if (modal) {
             modal.style.display = 'block';
-            console.log(`✅ Modal encontrado e exibido!`);
         } else {
-            console.error(`❌ Modal não encontrado!`);
         }
         return false;
     }
@@ -489,7 +600,7 @@ botao.addEventListener("click", function(event) {
 botao.addEventListener("touchend", function(event) {
     event.preventDefault();
     
-    // Cancela o timer de "segurar"
+    
     clearTimeout(touchTimer);
     
     if (navigator.vibrate) {
@@ -516,7 +627,8 @@ document.addEventListener("mousemove", function(event) {
         Math.pow(event.clientY - (rect.top + rect.height/2), 2)
     );
     
-    if (distance < 20 && !isMoving && clickAttempts < 2 && Math.random() < 0.1) {
+    
+    if (distance < 30 && !isMoving && clickAttempts < 3 && Math.random() < 0.2) {
         moverBotao();
     }
 });
@@ -531,7 +643,7 @@ document.addEventListener("touchmove", function(event) {
             Math.pow(touch.clientY - (rect.top + rect.height/2), 2)
         );
         
-        if (distance < 30 && !isMoving && clickAttempts < 2 && Math.random() < 0.15) {
+        if (distance < 50 && !isMoving && clickAttempts < 3 && Math.random() < 0.3) {
             moverBotao();
         }
     }
