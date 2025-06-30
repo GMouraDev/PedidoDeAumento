@@ -297,29 +297,32 @@ botao.addEventListener("touchstart", moverBotao);
 let clickAttempts = 0;
 botao.addEventListener("click", function(event) {
     clickAttempts++;
+    console.log(`🎯 Clique ${clickAttempts} detectado!`);
     
-    
-    const chanceDeEscape = clickAttempts < 5 ? 0.9 : (clickAttempts < 10 ? 0.6 : 0.3);
-    
-    if (Math.random() < chanceDeEscape) {
-       
+    if (clickAttempts <= 0) {
         event.preventDefault();
         event.stopPropagation();
         moverBotao();
-        
         
         botao.style.transform += ' scale(0.8)';
         setTimeout(() => {
             botao.style.transform = botao.style.transform.replace(' scale(0.8)', '');
         }, 200);
         
-        console.log(`Tentativa ${clickAttempts} - Escapou! (chance: ${chanceDeEscape})`);
+        console.log(`❌ Tentativa ${clickAttempts} - Escapou!`);
         return false;
     } else {
         event.preventDefault();
         event.stopPropagation();
-        console.log(`Tentativa ${clickAttempts} - CONSEGUIU CLICAR!`);
-        document.getElementById('confirmModal').style.display = 'block';
+        console.log(`✅ Tentativa ${clickAttempts} - ABRINDO MODAL!`);
+        
+        const modal = document.getElementById('confirmModal');
+        if (modal) {
+            modal.style.display = 'block';
+            console.log(`✅ Modal encontrado e exibido!`);
+        } else {
+            console.error(`❌ Modal não encontrado!`);
+        }
         return false;
     }
 });
@@ -341,10 +344,8 @@ document.addEventListener("mousemove", function(event) {
         Math.pow(event.clientY - (rect.top + rect.height/2), 2)
     );
     
-    
-    const zonaProximidade = clickAttempts < 3 ? 80 : (clickAttempts < 7 ? 40 : 20);
-    
-    if (distance < zonaProximidade && !isMoving && Math.random() < 0.3) {
+
+    if (distance < 20 && !isMoving && clickAttempts < 2 && Math.random() < 0.1) {
         moverBotao();
     }
 });
